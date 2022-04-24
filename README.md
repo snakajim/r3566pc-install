@@ -9,8 +9,11 @@ This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC boar
 # Get start
 
 
-Download SD Writer -> Download Ubuntu image -> SD Card burn-in -> Use the SD to boot R3566PC
+Download SD Writer -> SD Card burn-in -> Use the SD to boot R3566PC
 
+Download Buildroot & unzip -> Install driver
+
+Download files from [here](https://en.t-firefly.com/doc/download/96.html).
 
 ## Install SD Firmware tool
 
