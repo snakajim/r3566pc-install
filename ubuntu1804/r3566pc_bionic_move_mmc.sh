@@ -24,4 +24,6 @@ sudo mkfs.ext4 /dev/mmcblk0p4
 #
 
 # Partion 1:  +1G -> /tmp
-
+TARGET_DIR="/tmp"
+sudo mkdir -p /mnt${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0p1 /mnt${TARGET_DIR}
+tar cf /mnt${TARGET_DIR}
