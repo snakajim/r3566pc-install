@@ -2,7 +2,12 @@
 # r3566pc_bionic_move_mmc.sh
 #
 sudo apt -y update
-sudo dpkg-reconfigure keyboard-configuration
+localectl | grep pc105
+ret=$?
+if [ ! $ret == "0" ]; then
+  sudo dpkg-reconfigure keyboard-configuration
+  sudo reboot
+fi
 
 #
 # mount MMC and copy
@@ -70,9 +75,11 @@ EOF
 sudo umount ${TARGET_DIR}
 
 #
+echo ""
+echo "#########################"
 cat /etc/fstab.new
 read -p "Overwrite /etc/fstab,Ok?[Enter]"
-sudo /etc/fstab.new /etc/fstab
-mount -a
+sudo cp /etc/fstab.new /etc/fstab
+sudo mount -a
 read -p "reboot,Ok?[Enter]"
 sudo reboot
