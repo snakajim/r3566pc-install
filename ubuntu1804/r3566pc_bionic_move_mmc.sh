@@ -37,7 +37,7 @@ sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PART
 cd / && sudo sh -c "tar cf - ./tmp | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID}  ${MOUNT_DIR} ext3    defaults       1        2 
+/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR} ext3  defaults  1  3
 EOF
 sudo umount ${TARGET_DIR}
 
@@ -48,18 +48,18 @@ sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PART
 cd / && sudo sh -c "tar cf - ./var | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID}  ${MOUNT_DIR} ext3    defaults       1        2 
+/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR} ext3  defaults  1  3
 EOF
 sudo umount ${TARGET_DIR}
 
-# Partion 3:  +10G -> /usr
+# Partion 3:  +10G -> /usr/local
 TARGET_DIR="/mnt/usr/local"
 PARTISION_ID="p3"
 sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PARTISION_ID} ${TARGET_DIR}
 cd / && sudo sh -c "tar cf - ./usr/local | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID}  ${MOUNT_DIR} ext3    defaults       1        2 
+/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR} ext3  defaults  1  3
 EOF
 sudo umount ${TARGET_DIR}
 
@@ -70,7 +70,7 @@ sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PART
 cd / && sudo sh -c "tar cf - ./home | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID}  ${MOUNT_DIR} ext3    defaults       1        2 
+/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR} ext3  defaults  1  3
 EOF
 sudo umount ${TARGET_DIR}
 
