@@ -78,8 +78,8 @@ sudo umount ${TARGET_DIR}
 echo ""
 echo "#########################"
 cat /etc/fstab.new
-read -p "Overwrite /etc/fstab,Ok?[Enter]"
-sudo cp /etc/fstab.new /etc/fstab
-sudo mount -a
+#read -p "Overwrite /etc/fstab,Ok?[Enter]"
+#sudo cp /etc/fstab.new /etc/fstab
+#sudo mount -a
 read -p "reboot,Ok?[Enter]"
 sudo reboot
