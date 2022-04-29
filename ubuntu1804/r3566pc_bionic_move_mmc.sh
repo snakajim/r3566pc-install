@@ -79,7 +79,7 @@ echo ""
 echo "#########################"
 cat /etc/fstab.new
 read -p "Overwrite /etc/fstab,Ok?[Enter]"
-sudo cp /etc/fstab.new /etc/fstab
-sudo mount -a
+#sudo cp /etc/fstab.new /etc/fstab
+#sudo mount -a
 read -p "reboot,Ok?[Enter]"
 sudo reboot
