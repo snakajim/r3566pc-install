@@ -19,7 +19,7 @@ This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC boar
     - [Download OS image](#download-os-image)
   - [flash image to uSD](#flash-image-to-usd)
   - [Start Ubuntu 18.04](#start-ubuntu-1804)
-      - [Tips : Use on board MMC for storage](#tips-use-on-board-mmc-for-storage)
+      - [Tips : Use on board MMC for storage(as root, not sudo)](#tips-use-on-board-mmc-for-storageas-root-not-sudo)
       - [Tips : User ID and password](#tips-user-id-and-password)
       - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
 - [Revision](#revision)
@@ -67,14 +67,16 @@ Now insert your uSD card into R3566PC, then power on!
 If everything is ok, after 2-3min boot sequence, you have login console in your HDMI display. 
 ![Ubuntu1804](pict\R3566PC-ubuntu1804.JPG)
 
-You can start your program now. But before doing that, you can refer some tips for your work efficiencies and conveniencies.
+You can start your program development now. But before doing that, please refer some tips for your work efficiencies and conveniencies.
 
-#### Tips : Use on board MMC for storage
+#### Tips : Use on board MMC for storage(as root, not sudo)
 In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, browsing much easier way to migrate your critical directory, such as `/home,/var,/usr/lcoal,/tmp`, on the MMC. 
+
+Let's login as root and start.
 
 - First Check your storage by `lsblk`.
     ```
-    root@firefly: lsblk
+    root: lsblk
     mmcblk0 <- This is on board MMC
     ...
     mmcblk1 <- This is uSD card
@@ -84,20 +86,20 @@ In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, yo
 -  Next, make Partition in `/dev/mmcblk0`(on board MMC) and format each partision. 
 
     ```
-    root@firefly:sudo fdisk -l /dev/mmcblk0
+    root:sudo fdisk -l /dev/mmcblk0
     ....(Make partitions, save and quit)....
-    root@firefly: sudo mkfs.ext4 /dev/mmcblk0p1
-    root@firefly: sudo mkfs.ext4 /dev/mmcblk0p2
-    root@firefly: sudo mkfs.ext4 /dev/mmcblk0p3
-    root@firefly: sudo mkfs.ext4 /dev/mmcblk0p4
+    root: mkfs.ext4 /dev/mmcblk0p1
+    root: mkfs.ext4 /dev/mmcblk0p2
+    root: mkfs.ext4 /dev/mmcblk0p3
+    root: mkfs.ext4 /dev/mmcblk0p4
     ```
 - Next, mount them as `/mnt/XXX` and copy original folder in there.
     ```
-    root@firefly:
+    root:
     ```
 - Next, Unmount and update your `/etc/fstab`
     ```
-    root@firefly:
+    root:
     ```
 
 - Finally, reboot to activate new `/etc/fstab`

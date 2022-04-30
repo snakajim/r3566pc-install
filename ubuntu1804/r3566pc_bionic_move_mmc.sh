@@ -1,13 +1,13 @@
 #!/bin/bash
 # r3566pc_bionic_move_mmc.sh
 #
-sudo apt -y update
-localectl | grep "X11 Layout" | grep jp
-ret=$?
-if [ ! $ret == "0" ]; then
-  sudo apt -y install nano
-  sudo dpkg-reconfigure keyboard-configuration
-  sudo reboot
+
+WHOAMI=`whoami`
+
+if [ ! $WHOAMI == "root" ]; then
+  echo "This program should be run in root. Please login as root and try again."
+  echo "Program exit."
+  exit
 fi
 
 #
@@ -71,7 +71,7 @@ sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PART
 cd / && sudo sh -c "tar cf - ./home | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
+#/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
 EOF
 sudo umount ${TARGET_DIR}
 
