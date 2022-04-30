@@ -5,6 +5,7 @@ sudo apt -y update
 localectl | grep "X11 Layout" | grep jp
 ret=$?
 if [ ! $ret == "0" ]; then
+  sudo apt -y install nano
   sudo dpkg-reconfigure keyboard-configuration
   sudo reboot
 fi
@@ -48,7 +49,7 @@ sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PART
 cd / && sudo sh -c "tar cf - ./var | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4 defaults 1  3
+#/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4 defaults 1  3
 EOF
 sudo umount ${TARGET_DIR}
 
@@ -59,7 +60,7 @@ sudo mkdir -p ${TARGET_DIR} && sudo mount -t ext4 -o defaults /dev/mmcblk0${PART
 cd / && sudo sh -c "tar cf - ./usr/local | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | sudo tee -a /etc/fstab.new
-/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
+#/dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
 EOF
 sudo umount ${TARGET_DIR}
 
@@ -78,8 +79,8 @@ sudo umount ${TARGET_DIR}
 echo ""
 echo "#########################"
 cat /etc/fstab.new
-#read -p "Overwrite /etc/fstab,Ok?[Enter]"
-#sudo cp /etc/fstab.new /etc/fstab
-#sudo mount -a
+read -p "Overwrite /etc/fstab,Ok?[Enter]"
+sudo cp /etc/fstab.new /etc/fstab
+sudo mount -a
 read -p "reboot,Ok?[Enter]"
 sudo reboot
