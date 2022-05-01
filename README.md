@@ -14,20 +14,21 @@ This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC boar
 
 - [R3566PC installation Guide.](#r3566pc-installation-guide)
   - [Index <!-- omit in toc -->](#index-omit-in-toc-)
-- [Get start](#get-start)
-    - [Download SD Writer](#download-sd-writer)
-    - [Download OS image](#download-os-image)
-  - [flash image to uSD](#flash-image-to-usd)
-  - [Start Ubuntu 18.04](#start-ubuntu-1804)
-      - [Tips : Migrate date to MMC device(as root, not sudo)](#tips-migrate-date-to-mmc-deviceas-root-not-sudo)
-      - [Tips : User ID and password](#tips-user-id-and-password)
-      - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
-- [Revision](#revision)
+  - [Get start with SD card for Beginners](#get-start-with-sd-card-for-beginners)
+      - [Download SD Writer](#download-sd-writer)
+      - [Download OS image](#download-os-image)
+      - [flash image to uSD](#flash-image-to-usd)
+      - [Start Ubuntu 18.04](#start-ubuntu-1804)
+        - [Tips : Migrate date to MMC device(as root, not sudo)](#tips-migrate-date-to-mmc-deviceas-root-not-sudo)
+        - [Tips : User ID and password](#tips-user-id-and-password)
+        - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
+  - [Build your own Linux image and flash to the board](#build-your-own-linux-image-and-flash-to-the-board)
+  - [Revision History](#revision-history)
 
 <!-- /code_chunk_output -->
 
 
-# Get start
+## Get start with SD card for Beginners
 
 Let's use Windows 10 host environment, here is the way to go.
 
@@ -39,16 +40,16 @@ flowchart LR;
 ```
 R3566PC software download site is [here](https://en.t-firefly.com/doc/download/96.html).
 
-### Download SD Writer
+#### Download SD Writer
 
 Download FireFly SD writer from [here](pict\R3566-SDTool1.jpg) then install. After SD tool installation, set ```Selected=2``` at application config file to change language code in `SDDiskTool_v1.7/config.ini`.
 
-### Download OS image
+#### Download OS image
 
- - Bildroot image is [here](pict\R3566-Buildroot.jpg).
+ - Buildroot image is [here](pict\R3566-Buildroot.jpg).
  - Ubuntu image is [here](pict\R3566-UbuntuImage.jpg). Choose 18.04, some issue in 20.04 image.
 
-## flash image to uSD
+#### flash image to uSD
 
 Connect all necesarry cables such as `USB keyboard`, `USB mouse`, `HDMI`, `USB-C power cable` and `Ethernet cable` to your R3566PC board. Your machine may look like that.
 
@@ -62,14 +63,17 @@ Then start `SD_Firmware_Tool.exe`, the choose `SD boot`, set `Firmware` to your 
 
 Now insert your uSD card into R3566PC, then power on!
 
-## Start Ubuntu 18.04
+#### Start Ubuntu 18.04
 
 If everything is ok, after 2-3min boot sequence, you have login console in your HDMI display. 
 ![Ubuntu1804](pict/R3566PC-ubuntu1804.JPG)
 
 You can start your program development now. But before doing that, please refer some tips for your work efficiencies and conveniencies.
 
-#### Tips : Migrate date to MMC device(as root, not sudo)
+##### Tips : Migrate date to MMC device(as root, not sudo)
+
+You can find sample script from [here](ubuntu1804\r3566pc_bionic_move_mmc.sh).
+
 In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, exploring much easier way to migrate your critical directories, such as `/home,/var,/usr/lcoal,/tmp`, on the MMC. 
 
 Let's login as root and start.
@@ -127,15 +131,16 @@ mmcblk0boot0 179:64   0    4M  1 disk
 mmcblk0boot1 179:96   0    4M  1 disk
 ```
 
-Now your hardware is a little bit faster and stable, since some of critical directories are in MMC, but not in slow&unstable uSD card.
+Now your hardware is a little bit faster and stable, since some of critical directories are in MMC, but not in slow&unstable uSD card. 
 
-
-#### Tips : User ID and password
+##### Tips : User ID and password
 https://wiki.t-firefly.com/en/Firefly-Linux-Guide/manual_ubuntu.html
 - Firefly user password: firefly
 - Root user: No root password is set by default. Firefly users configure the root password by themselves through the sudo passwd root command.
 
-#### Tips : Enable mDSN and remote SSH access from your host
+##### Tips : Enable mDSN and remote SSH access from your host
+
+You can find sample script from [here](ubuntu1804\r3566pc_bionic_init.sh).
 
 Install avahi-daemon then enable. And change `/etc/ssh/sshd_config` to allow root login(this is not recommended for security purpose, but only for debug purpose).
 
@@ -160,7 +165,9 @@ firefly@firefly: sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightd
 firefly@firefly: sudo service lightdm restart
 ```
 
+## Build your own Linux image and flash to the board
 
+This is for intermidiate users. Contents TBD.
 
-# Revision
+## Revision History
 - v22.04 initial version, only SD boot mode and some tips.
