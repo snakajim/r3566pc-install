@@ -19,6 +19,10 @@ sudo service sshd restart
 #
 sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
 #
+# change timezone to Asia/Tokyo
+#
+sudo timedatectl set-timezone Asia/Tokyo
+#
 # change keyboard layout
 #
 localectl | grep "X11 Layout" | grep jp
@@ -26,7 +30,6 @@ ret=$?
 if [ ! $ret == "0" ]; then
   sudo apt -y install nano
   sudo dpkg-reconfigure keyboard-configuration
-  sudo timedatectl set-timezone Asia/Tokyo
   sudo reboot
 fi
 #
