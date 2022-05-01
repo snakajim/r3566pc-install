@@ -18,7 +18,7 @@ fdisk /dev/mmcblk0
 
 # Partion 1:  +1G -> /tmp
 # Partion 2: +10G -> /var
-# Partion 3: +10G -> /usr/local
+# Partion 3: +10G -> /usr
 # Partion 4: 37.3G-> /home
 mkfs.ext4 /dev/mmcblk0p1
 mkfs.ext4 /dev/mmcblk0p2
@@ -57,12 +57,12 @@ EOF
 umount ${TARGET_DIR}
 rm -rf ${TARGET_DIR}
 
-# Partion 3:  +10G -> /usr/local
-TARGET_DIR="/mnt/usr/local"
+# Partion 3:  +10G -> /usr
+TARGET_DIR="/mnt/usr"
 PARTISION_ID="p3"
 umount ${TARGET_DIR} && rm -rf ${TARGET_DIR}
 mkdir -p ${TARGET_DIR} && mount -t ext4 -o defaults /dev/mmcblk0${PARTISION_ID} ${TARGET_DIR}
-cd /usr/local && sh -c "tar cf - . | ( cd ${TARGET_DIR}; tar xvf -)"
+cd /usr && sh -c "tar cf - . | ( cd ${TARGET_DIR}; tar xvf -)"
 MOUNT_DIR=`echo ${TARGET_DIR} | sed "s#^/mnt##"`
 cat << EOF | tee -a /etc/fstab.new
 /dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
