@@ -19,7 +19,7 @@ This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC boar
     - [Download OS image](#download-os-image)
   - [flash image to uSD](#flash-image-to-usd)
   - [Start Ubuntu 18.04](#start-ubuntu-1804)
-      - [Tips : Use on board MMC for storage(as root, not sudo)](#tips-use-on-board-mmc-for-storageas-root-not-sudo)
+      - [Tips : Migrate date to MMC device(as root, not sudo)](#tips-migrate-date-to-mmc-deviceas-root-not-sudo)
       - [Tips : User ID and password](#tips-user-id-and-password)
       - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
 - [Revision](#revision)
@@ -52,57 +52,83 @@ Download FireFly SD writer from [here](pict\R3566-SDTool1.jpg) then install. Aft
 
 Connect all necesarry cables such as `USB keyboard`, `USB mouse`, `HDMI`, `USB-C power cable` and `Ethernet cable` to your R3566PC board. Your machine may look like that.
 
-![R3566PC Ready to go](pict/R3566PC-connect.JPG)
+![R3566PC_Ready_to_go](pict/R3566PC-connect.JPG)
 
 Before flashing images to uSD card, recommending to reformat the uSD by overwrite. (Quick format makes some issues wehn you flash the images.) For the SD card format, you can download `SD Memory Card Formatter Application` from [SD associates](https://www.sdcard.org/downloads/formatter/). Full formatting takes about 15min(32G), but it is worth doing to avoid data conflict issue only by quick format.
 
 Then start `SD_Firmware_Tool.exe`, the choose `SD boot`, set `Firmware` to your download OS image, then click `Create`. It may takes 3-5 mins to complete.
 
-![flash image to uSD](pict/SDflash.png)
+![flash image to uSD](pict/SDFlush.png)
 
 Now insert your uSD card into R3566PC, then power on!
 
 ## Start Ubuntu 18.04
 
 If everything is ok, after 2-3min boot sequence, you have login console in your HDMI display. 
-![Ubuntu1804](pict\R3566PC-ubuntu1804.JPG)
+![Ubuntu1804](pict/R3566PC-ubuntu1804.JPG)
 
 You can start your program development now. But before doing that, please refer some tips for your work efficiencies and conveniencies.
 
-#### Tips : Use on board MMC for storage(as root, not sudo)
-In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, browsing much easier way to migrate your critical directory, such as `/home,/var,/usr/lcoal,/tmp`, on the MMC. 
+#### Tips : Migrate date to MMC device(as root, not sudo)
+In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, exploring much easier way to migrate your critical directories, such as `/home,/var,/usr/lcoal,/tmp`, on the MMC. 
 
 Let's login as root and start.
 
-- First Check your storage by `lsblk`.
+- First Check your storage by `lsblk` and make backup for `/etc/fstab`
     ```
-    root: lsblk
+    root@firefly: lsblk
     mmcblk0 <- This is on board MMC
     ...
     mmcblk1 <- This is uSD card
     ...
+    root@firefly: cp /etc/fstab /etc/fstab.bak
+    root@firefly: cp /etc/fstab /etc/fstab.new
     ```
 
 -  Next, make Partition in `/dev/mmcblk0`(on board MMC) and format each partision. 
 
     ```
-    root:sudo fdisk -l /dev/mmcblk0
-    ....(Make partitions, save and quit)....
-    root: mkfs.ext4 /dev/mmcblk0p1
-    root: mkfs.ext4 /dev/mmcblk0p2
-    root: mkfs.ext4 /dev/mmcblk0p3
-    root: mkfs.ext4 /dev/mmcblk0p4
+    root@firefly: fdisk -l /dev/mmcblk0
+    ....(Make 4 partitions, write and quit)....
+    root@firefly: mkfs.ext4 /dev/mmcblk0p1
+    root@firefly: mkfs.ext4 /dev/mmcblk0p2
+    root@firefly: mkfs.ext4 /dev/mmcblk0p3
+    root@firefly: mkfs.ext4 /dev/mmcblk0p4
     ```
-- Next, mount them as `/mnt/XXX` and copy original folder in there.
+- Next, mount `/dev/mmcblk0p1` as `/mnt/XXX` and copy original folder in there.
     ```
-    root:
+    root@firefly: mkdir -p /mnt/XXX && mount -t ext4 -o defaults /dev/mmcblk0p1 /mnt/XXX
+    root@firefly: cd /tmp && sh -c "tar cf - . | ( cd /mnt/XXX; tar xvf -)"
     ```
-- Next, Unmount and update your `/etc/fstab`
+- Next, Update your `/etc/fstab.new` and unmount `/mnt/XXX`.
     ```
-    root:
+    root@firefly: cat << EOF | tee -a /etc/fstab.new
+    /dev/mmcblk0p1 /tmp  ext4  defaults  1 3
+    EOF
+    root@firefly: umount /mnt/XXX && rm -rf /mnt/XXX
     ```
 
-- Finally, reboot to activate new `/etc/fstab`
+- Finally, replace `/etc/fstab` and reboot to activate new `/etc/fstab`
+    ```
+    root@firefly: cp /etc/fstab.new /etc/fstab
+    root@firefly: mount -a
+    root@firefly: reboot
+    ```
+
+Repeat this process to each `/home,/var,/usr/lcoal,/tmp` directory. Once all done, you can see the new storage map.
+```
+root@firefly: lsblk | grep mmcblk0
+mmcblk0      179:32   0 58.3G  0 disk
+├─mmcblk0p1  179:33   0    1G  0 part /tmp
+├─mmcblk0p2  179:34   0   10G  0 part /var
+├─mmcblk0p3  179:35   0   10G  0 part /usr/local
+└─mmcblk0p4  179:36   0 37.3G  0 part /home
+mmcblk0boot0 179:64   0    4M  1 disk
+mmcblk0boot1 179:96   0    4M  1 disk
+```
+
+Now your hardware is a little bit faster and stable, since some of critical directories are in MMC, but not in slow&unstable uSD card.
+
 
 #### Tips : User ID and password
 https://wiki.t-firefly.com/en/Firefly-Linux-Guide/manual_ubuntu.html
@@ -111,10 +137,30 @@ https://wiki.t-firefly.com/en/Firefly-Linux-Guide/manual_ubuntu.html
 
 #### Tips : Enable mDSN and remote SSH access from your host
 
+Install avahi-daemon then enable. And change `/etc/ssh/sshd_config` to allow root login(this is not recommended for security purpose, but only for debug purpose).
+
 ```
-root@firefly: sudo apt -y install
-root@firefly: 
+firefly@firefly: sudo apt -y update
+firefly@firefly: sudo apt-get install -y avahi-daemon
+firefly@firefly: sudo systemctl restart avahi-daemon.service
+firefly@firefly: sudo sed -i -e "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config
+firefly@firefly: sudo service sshd restart
+firefly@firefly: sudo reboot
 ```
+
+Now your R3566PC is visible in your local network as `hostname=firefly` and `domain=local`. You can access the board from your host SSH terminal.
+```
+HOST :> ssh firefly@firefly.local
+```
+
+As optional, change `/etc/lightdm/lightdm.conf.d/` to disable auto login in GUI.
+
+```
+firefly@firefly: sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
+firefly@firefly: sudo service lightdm restart
+```
+
+
 
 # Revision
 - v22.04 initial version, only SD boot mode and some tips.

@@ -42,6 +42,7 @@ cat << EOF | tee -a /etc/fstab.new
 /dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR} ext4  defaults  1  3
 EOF
 umount ${TARGET_DIR}
+rm -rf ${TARGET_DIR}
 
 # Partion 2:  +10G -> /var
 TARGET_DIR="/mnt/var"
@@ -54,6 +55,7 @@ cat << EOF | tee -a /etc/fstab.new
 /dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4 defaults 1  3
 EOF
 umount ${TARGET_DIR}
+rm -rf ${TARGET_DIR}
 
 # Partion 3:  +10G -> /usr/local
 TARGET_DIR="/mnt/usr/local"
@@ -66,6 +68,7 @@ cat << EOF | tee -a /etc/fstab.new
 /dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
 EOF
 umount ${TARGET_DIR}
+rm -rf ${TARGET_DIR}
 
 # Partion 4:  37.3G -> /home
 TARGET_DIR="/mnt/home"
@@ -78,6 +81,7 @@ cat << EOF | tee -a /etc/fstab.new
 /dev/mmcblk0${PARTISION_ID} ${MOUNT_DIR}  ext4  defaults  1 3
 EOF
 umount ${TARGET_DIR}
+rm -rf ${TARGET_DIR}
 
 #
 echo ""
@@ -86,5 +90,6 @@ cat /etc/fstab.new
 read -p "Overwrite /etc/fstab,Ok?[Enter]"
 cp /etc/fstab.new /etc/fstab
 mount -a
-read -p "reboot,Ok?[Enter]"
+echo "Make sure you don't have error or warniig in mount."
+read -p "If no error, reboot. Ok?[Enter]"
 reboot
