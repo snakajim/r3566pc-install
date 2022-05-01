@@ -15,19 +15,19 @@ For your imformation, there are several public information on the web.
 <!-- code_chunk_output -->
 
 - [Preface](#preface)
-  - [Index <!-- omit in toc -->](#index-omit-in-toc-)
   - [1. Get start with SD card for Beginners](#1-get-start-with-sd-card-for-beginners)
       - [Download SD Writer](#download-sd-writer)
       - [Download OS image](#download-os-image)
       - [flash image to uSD](#flash-image-to-usd)
       - [Start Ubuntu 18.04](#start-ubuntu-1804)
-        - [Tips : Migrate date to MMC device(as root, not sudo)](#tips-migrate-date-to-mmc-deviceas-root-not-sudo)
-        - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
-        - [Tips : Enable WiFi from CLI](#tips-enable-wifi-from-cli)
+        - [Tips : Migrate data to MMC device(as root, not sudo)](#tips--migrate-data-to-mmc-deviceas-root-not-sudo)
+        - [Tips : Enable mDSN and remote SSH access from your host](#tips--enable-mdsn-and-remote-ssh-access-from-your-host)
+        - [Tips : Enable WiFi from CLI](#tips--enable-wifi-from-cli)
   - [2. Build your own Linux image and flash to the board](#2-build-your-own-linux-image-and-flash-to-the-board)
 - [Revision History](#revision-history)
 
 <!-- /code_chunk_output -->
+
 
 
 ## 1. Get start with SD card for Beginners
@@ -72,7 +72,7 @@ If everything is ok, after 2-3min boot sequence, you have login console in your 
 
 You can start your program development now. But before doing that, please refer some tips for your work efficiencies and conveniencies.
 
-##### Tips : Migrate date to MMC device(as root, not sudo)
+##### Tips : Migrate data to MMC device(as root, not sudo)
 
 You can download sample script from [here](ubuntu1804\r3566pc_bionic_move_mmc.sh) or 
 ```
