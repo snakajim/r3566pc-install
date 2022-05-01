@@ -22,7 +22,6 @@ For your imformation, there are several public information on the web.
       - [flash image to uSD](#flash-image-to-usd)
       - [Start Ubuntu 18.04](#start-ubuntu-1804)
         - [Tips : Migrate date to MMC device(as root, not sudo)](#tips-migrate-date-to-mmc-deviceas-root-not-sudo)
-        - [Tips : User ID and password](#tips-user-id-and-password)
         - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
         - [Tips : Enable WiFi from CLI](#tips-enable-wifi-from-cli)
   - [2. Build your own Linux image and flash to the board](#2-build-your-own-linux-image-and-flash-to-the-board)
@@ -96,13 +95,13 @@ Let's login as root and start.
     ```
 
 -  Next, make 6 Partition in `/dev/mmcblk0`(on board MMC) and format each partision. 
-    Partition example is
-    - # Partion 1:  +1G -> /tmp
-    - # Partion +1: +1G -> /opt
-    - # Partion +1: +10G -> /var
-    - # Partion +1: +10G -> /usr
-    - # Partion +1: +5G -> /lib
-    - # Partion +1: 31.3G-> /home
+    Partition example and size setting is,
+        - Partion 1:  +1G -> /tmp
+        - Partion +1: +1G -> /opt
+        - Partion +1: +10G -> /var
+        - Partion +1: +10G -> /usr
+        - Partion +1: +5G -> /lib
+        - Partion +1: 31.3G-> /home
     ```
     root@firefly: fdisk -l /dev/mmcblk0
     ....(Make 6 partitions, write and quit)....
@@ -133,25 +132,21 @@ Let's login as root and start.
     root@firefly: reboot
     ```
 
-Repeat this process to each `/home,/var,/usr,/tmp` directory. Once all done, you can see the new storage map.
-```
-mmcblk0      179:0    0 58.3G  0 disk
-├─mmcblk0p1  179:1    0    1G  0 part /tmp
-├─mmcblk0p2  179:2    0    1G  0 part /opt
-├─mmcblk0p3  179:3    0   10G  0 part /var
-├─mmcblk0p4  179:4    0   10G  0 part /usr
-├─mmcblk0p5  179:5    0    5G  0 part /lib
-└─mmcblk0p6  179:6    0 31.3G  0 part /home
-mmcblk0boot0 179:32   0    4M  1 disk
-mmcblk0boot1 179:64   0    4M  1 disk
-```
+    Repeat this process to each `/home,/var,/usr,/tmp` directory. Once all done, you can see the new storage map.
+    ```
+    mmcblk0      179:0    0 58.3G  0 disk
+    ├─mmcblk0p1  179:1    0    1G  0 part /tmp
+    ├─mmcblk0p2  179:2    0    1G  0 part /opt
+    ├─mmcblk0p3  179:3    0   10G  0 part /var
+    ├─mmcblk0p4  179:4    0   10G  0 part /usr
+    ├─mmcblk0p5  179:5    0    5G  0 part /lib
+    └─mmcblk0p6  179:6    0 31.3G  0 part /home
+    mmcblk0boot0 179:32   0    4M  1 disk
+    mmcblk0boot1 179:64   0    4M  1 disk
+    ```
 
-Now your hardware is much faster and stable, since some of critical directories are stored in MMC, but not in slow & unstable uSD card. 
-
-##### Tips : User ID and password
-https://wiki.t-firefly.com/en/Firefly-Linux-Guide/manual_ubuntu.html
-- Firefly user password: firefly
-- Root user: No root password is set by default. Firefly users configure the root password by themselves through the sudo passwd root command.
+    Now your hardware is much faster and stable, since some of critical directories are stored in MMC, but not in slow & unstable uSD card. 
+    
 
 ##### Tips : Enable mDSN and remote SSH access from your host
 
@@ -161,65 +156,66 @@ https://wiki.t-firefly.com/en/Firefly-Linux-Guide/manual_ubuntu.html
     firefly@firefly: curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_init.sh > r3566pc_bionic_init.sh
     ```
 
-Install avahi-daemon then enable. And change `/etc/ssh/sshd_config` to allow root login(this is not recommended for security purpose, but only for debug purpose).
+    Install avahi-daemon then enable. And change `/etc/ssh/sshd_config` to allow root login(this is not recommended for security purpose, but only for debug purpose).
 
-```
-firefly@firefly: sudo apt -y update
-firefly@firefly: sudo apt-get install -y avahi-daemon
-firefly@firefly: sudo systemctl restart avahi-daemon.service
-firefly@firefly: sudo sed -i -e "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config
-firefly@firefly: sudo service sshd restart
-firefly@firefly: sudo reboot
-```
+    ```
+    firefly@firefly: sudo apt -y update
+    firefly@firefly: sudo apt-get install -y avahi-daemon
+    firefly@firefly: sudo systemctl restart avahi-daemon.service
+    firefly@firefly: sudo sed -i -e "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config
+    firefly@firefly: sudo service sshd restart
+    firefly@firefly: sudo reboot
+    ```
 
-Now your R3566PC is visible in your local network as `hostname=firefly` and `domain=local`. You can access the board from your host SSH terminal.
-```
-HOST :> ssh firefly@firefly.local
-```
+    Now your R3566PC is visible in your local network as `hostname=firefly` and `domain=local`. You can access the board from your host SSH terminal.
+    ```
+    HOST :> ssh firefly@firefly.local
+    ```
 
-As optional, change `/etc/lightdm/lightdm.conf.d/` to disable auto login in GUI.
+    As optional, change `/etc/lightdm/lightdm.conf.d/` to disable auto login in GUI.
 
-```
-firefly@firefly: sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
-firefly@firefly: sudo service lightdm restart
-```
+    ```
+    firefly@firefly: sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
+    firefly@firefly: sudo service lightdm restart
+    ```
 
 ##### Tips : Enable WiFi from CLI
 
 WiFi is disabled as default setting, so let's connect to your home WiFi(`SSID=XXXXXXXXXXXXXXX`).
-```
-firefly@firefly: nmcli device status
-DEVICE  TYPE      STATE         CONNECTION
-eth0    ethernet  connected     Wired connection 1
-wlan0   wifi      disconnected  --
-lo      loopback  unmanaged     --
-firefly@firefly: nmcli device wifi list
-IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
+    
+    ```
+    firefly@firefly: nmcli device status
+    DEVICE  TYPE      STATE         CONNECTION
+    eth0    ethernet  connected     Wired connection 1
+    wlan0   wifi      disconnected  --
+    lo      loopback  unmanaged     --
+    firefly@firefly: nmcli device wifi list
+    IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
         XXXXXXXXXXXXXXX                 Infra  9     540 Mbit/s  55      ▂▄__  WPA2
         YYYYYYYYYYYYYYY                 Infra  9     65 Mbit/s   50      ▂▄__  WPA2
-```
+    ```
 
-To set WiFI password for SSID=XXXXX,
-```
-firefly@firefly: SSID="<your WiFi SSID>"
-firefly@firefly: WIFIPASS="<your WiFi SSID password>"
-firefly@firefly: sudo nmcli device wifi connect ${SSID} password ${WIFIPASS} ifname wlan0
-Device 'wlan0' successfully activated with 'zzz-zzzzzzz-zzz-zzzz'.
-```
+    To set WiFI password for SSID=XXXXX,
+    ```
+    firefly@firefly: SSID="<your WiFi SSID>"
+    firefly@firefly: WIFIPASS="<your WiFi SSID password>"
+    firefly@firefly: sudo nmcli device wifi connect ${SSID} password ${WIFIPASS} ifname wlan0
+    Device 'wlan0' successfully activated with 'zzz-zzzzzzz-zzz-zzzz'.
+    ```
 
 You can confirm that wlan0 is in use.
 
-```
-firefly@firefly:~$ nmcli device wifi list
-IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
-*       XXXXXXXXXXXXXXX                 Infra  9     540 Mbit/s  56      ▂▄▆_  WPA2
-        YYYYYYYYYYYYYYY                 Infra  9     65 Mbit/s   54      ▂▄__  WPA2
-firefly@firefly:~$ nmcli device status
-DEVICE  TYPE      STATE      CONNECTION
-eth0    ethernet  connected  Wired connection 1
-wlan0   wifi      connected  XXXXXXXXXXXXXXX
-lo      loopback  unmanaged  --        
-```
+    ```
+    firefly@firefly:~$ nmcli device wifi list
+    IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
+    *       XXXXXXXXXXXXXXX                 Infra  9     540 Mbit/s  56      ▂▄▆_  WPA2
+        YYYYYYYYYYYYYYY                     Infra  9     65 Mbit/s   54      ▂▄__  WPA2
+    firefly@firefly:~$ nmcli device status
+    DEVICE  TYPE      STATE      CONNECTION
+    eth0    ethernet  connected  Wired connection 1
+    wlan0   wifi      connected  XXXXXXXXXXXXXXX
+    lo      loopback  unmanaged  --        
+    ```
 
 ## 2. Build your own Linux image and flash to the board
 
