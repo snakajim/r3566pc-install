@@ -1,10 +1,12 @@
-# R3566PC installation Guide.
+# Preface
 
-This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC board, there are several public information.
+This is Firefly EC-R3566PC Ubuntu installation guide. EC-R3566PC is an affortable, self-contained, reasonably fast with Cortex-A55 6 CPUs and stable hardware for your aarch64 linux programming study. 
 
- - Download site https://en.t-firefly.com/doc/download/96.html
- - Board specification https://download.t-firefly.com/%E4%BA%A7%E5%93%81%E8%A7%84%E6%A0%BC%E6%96%87%E6%A1%A3/%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B8%BB%E6%9C%BA/EC-R3566PC%20Specification.pdf
- - Board manual https://wiki.t-firefly.com/en/EC-R3566PC/ or https://wiki.t-firefly.com/ROC-RK3566-PC/index.html
+For your imformation, there are several public information on the web.
+
+ - Download site : https://en.t-firefly.com/doc/download/96.html
+ - Board specification : https://download.t-firefly.com/%E4%BA%A7%E5%93%81%E8%A7%84%E6%A0%BC%E6%96%87%E6%A1%A3/%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B8%BB%E6%9C%BA/EC-R3566PC%20Specification.pdf
+ - Board manual : https://wiki.t-firefly.com/en/EC-R3566PC/ or https://wiki.t-firefly.com/ROC-RK3566-PC/index.html
 
 ## Index <!-- omit in toc -->
 
@@ -12,9 +14,9 @@ This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC boar
 
 <!-- code_chunk_output -->
 
-- [R3566PC installation Guide.](#r3566pc-installation-guide)
+- [Preface](#preface)
   - [Index <!-- omit in toc -->](#index-omit-in-toc-)
-  - [Get start with SD card for Beginners](#get-start-with-sd-card-for-beginners)
+  - [1. Get start with SD card for Beginners](#1-get-start-with-sd-card-for-beginners)
       - [Download SD Writer](#download-sd-writer)
       - [Download OS image](#download-os-image)
       - [flash image to uSD](#flash-image-to-usd)
@@ -23,13 +25,13 @@ This is Firefly EC-R3566PC ubuntu installation guide. About Firefly R3566PC boar
         - [Tips : User ID and password](#tips-user-id-and-password)
         - [Tips : Enable mDSN and remote SSH access from your host](#tips-enable-mdsn-and-remote-ssh-access-from-your-host)
         - [Tips : Enable WiFi from CLI](#tips-enable-wifi-from-cli)
-  - [Build your own Linux image and flash to the board](#build-your-own-linux-image-and-flash-to-the-board)
-  - [Revision History](#revision-history)
+  - [2. Build your own Linux image and flash to the board](#2-build-your-own-linux-image-and-flash-to-the-board)
+- [Revision History](#revision-history)
 
 <!-- /code_chunk_output -->
 
 
-## Get start with SD card for Beginners
+## 1. Get start with SD card for Beginners
 
 Let's use Windows 10 host environment, here is the way to go.
 
@@ -210,9 +212,9 @@ wlan0   wifi      connected  XXXXXXXXXXXXXXX
 lo      loopback  unmanaged  --        
 ```
 
-## Build your own Linux image and flash to the board
+## 2. Build your own Linux image and flash to the board
 
 This is for intermidiate users. Contents TBD.
 
-## Revision History
+# Revision History
 - v22.04 initial version, only SD boot mode and some tips.
