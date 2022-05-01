@@ -18,7 +18,6 @@ sudo service sshd restart
 # change autologin-user in lightdm
 #
 sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
-sudo service lightdm restart
 #
 # change keyboard layout
 #
@@ -27,8 +26,9 @@ ret=$?
 if [ ! $ret == "0" ]; then
   sudo apt -y install nano
   sudo dpkg-reconfigure keyboard-configuration
+  sudo timedatectl set-timezone Asia/Tokyo
   sudo reboot
 fi
 #
-# reboot
-sudo reboot
+# reset Window system(auto logout)
+sudo service lightdm restart
