@@ -80,7 +80,7 @@ You can start your program development now. But before doing that, please refer 
     root@firefly: curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_move_mmc.sh > r3566pc_bionic_move_mmc.sh
     ```
 
-In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, exploring much easier way to migrate your critical directories, such as `/home,/var,/usr,/tmp`, on the MMC. 
+In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, exploring much easier way to migrate your critical directories, such as `/home,/var,/usr,/tmp,/opt and /lib`, on the MMC. 
 
 Let's login as root and start.
 
@@ -95,15 +95,23 @@ Let's login as root and start.
     root@firefly: cp /etc/fstab /etc/fstab.new
     ```
 
--  Next, make Partition in `/dev/mmcblk0`(on board MMC) and format each partision. 
-
+-  Next, make 6 Partition in `/dev/mmcblk0`(on board MMC) and format each partision. 
+    Partition example is
+    - # Partion 1:  +1G -> /tmp
+    - # Partion +1: +1G -> /opt
+    - # Partion +1: +10G -> /var
+    - # Partion +1: +10G -> /usr
+    - # Partion +1: +5G -> /lib
+    - # Partion +1: 31.3G-> /home
     ```
     root@firefly: fdisk -l /dev/mmcblk0
-    ....(Make 4 partitions, write and quit)....
+    ....(Make 6 partitions, write and quit)....
     root@firefly: mkfs.ext4 /dev/mmcblk0p1
     root@firefly: mkfs.ext4 /dev/mmcblk0p2
     root@firefly: mkfs.ext4 /dev/mmcblk0p3
     root@firefly: mkfs.ext4 /dev/mmcblk0p4
+    root@firefly: mkfs.ext4 /dev/mmcblk0p5
+    root@firefly: mkfs.ext4 /dev/mmcblk0p6
     ```
 - Next, mount `/dev/mmcblk0p1` as `/mnt/XXX` and copy original folder in there.
     ```
@@ -127,17 +135,18 @@ Let's login as root and start.
 
 Repeat this process to each `/home,/var,/usr,/tmp` directory. Once all done, you can see the new storage map.
 ```
-root@firefly: lsblk | grep mmcblk0
 mmcblk0      179:0    0 58.3G  0 disk
 ├─mmcblk0p1  179:1    0    1G  0 part /tmp
-├─mmcblk0p2  179:2    0   10G  0 part /var
-├─mmcblk0p3  179:3    0   10G  0 part /usr
-└─mmcblk0p4  179:4    0 37.3G  0 part /home
+├─mmcblk0p2  179:2    0    1G  0 part /opt
+├─mmcblk0p3  179:3    0   10G  0 part /var
+├─mmcblk0p4  179:4    0   10G  0 part /usr
+├─mmcblk0p5  179:5    0    5G  0 part /lib
+└─mmcblk0p6  179:6    0 31.3G  0 part /home
 mmcblk0boot0 179:32   0    4M  1 disk
 mmcblk0boot1 179:64   0    4M  1 disk
 ```
 
-Now your hardware is faster and stable, since some of critical directories are stored in MMC, but not in slow & unstable uSD card. 
+Now your hardware is much faster and stable, since some of critical directories are stored in MMC, but not in slow & unstable uSD card. 
 
 ##### Tips : User ID and password
 https://wiki.t-firefly.com/en/Firefly-Linux-Guide/manual_ubuntu.html
