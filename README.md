@@ -74,10 +74,10 @@ You can start your program development now. But before doing that, please refer 
 
 ##### Tips : Migrate date to MMC device(as root, not sudo)
 
-* You can find sample script from [here](ubuntu1804\r3566pc_bionic_move_mmc.sh) or 
-    ```
-    root@firefly: curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_move_mmc.sh > r3566pc_bionic_move_mmc.sh
-    ```
+You can download sample script from [here](ubuntu1804\r3566pc_bionic_move_mmc.sh) or 
+```
+root@firefly: curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_move_mmc.sh > r3566pc_bionic_move_mmc.sh
+```
 
 In the board, you have 64G or 32G MMC storage. To use the MMC device for `/`, you need to use complex `Boot Mode` instead of uSD boot. In here, exploring much easier way to migrate your critical directories, such as `/home,/var,/usr,/tmp,/opt and /lib`, on the MMC. 
 
@@ -150,72 +150,73 @@ Let's login as root and start.
 
 ##### Tips : Enable mDSN and remote SSH access from your host
 
-* You can find sample script from [here](ubuntu1804\r3566pc_bionic_init.sh) or 
+You can find sample script from [here](ubuntu1804\r3566pc_bionic_init.sh) or 
 
-    ```
-    firefly@firefly: curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_init.sh > r3566pc_bionic_init.sh
-    ```
+```    
+firefly@firefly: curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_init.sh > r3566pc_bionic_init.sh
+```    
 
-    Install avahi-daemon then enable. And change `/etc/ssh/sshd_config` to allow root login(this is not recommended for security purpose, but only for debug purpose).
+Install avahi-daemon then enable. And change `/etc/ssh/sshd_config` to allow root login(this is not recommended for security purpose, but only for debug purpose).
 
-    ```
-    firefly@firefly: sudo apt -y update
-    firefly@firefly: sudo apt-get install -y avahi-daemon
-    firefly@firefly: sudo systemctl restart avahi-daemon.service
-    firefly@firefly: sudo sed -i -e "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config
-    firefly@firefly: sudo service sshd restart
-    firefly@firefly: sudo reboot
-    ```
+```
+firefly@firefly: sudo apt -y update
+firefly@firefly: sudo apt-get install -y avahi-daemon
+firefly@firefly: sudo systemctl restart avahi-daemon.service
+firefly@firefly: sudo sed -i -e "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config
+firefly@firefly: sudo service sshd restart
+firefly@firefly: sudo reboot
+```
 
-    Now your R3566PC is visible in your local network as `hostname=firefly` and `domain=local`. You can access the board from your host SSH terminal.
-    ```
-    HOST :> ssh firefly@firefly.local
-    ```
+Now your R3566PC is visible in your local network as `hostname=firefly` and `domain=local`. You can access the board from your host SSH terminal.
+    
+```
+HOST :> ssh firefly@firefly.local
+```
 
-    As optional, change `/etc/lightdm/lightdm.conf.d/` to disable auto login in GUI.
+As optional, change `/etc/lightdm/lightdm.conf.d/` to disable auto login in GUI.
 
-    ```
-    firefly@firefly: sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
-    firefly@firefly: sudo service lightdm restart
-    ```
+```
+firefly@firefly: sudo sed -i -e "s/^autologin-user/#autologin-user/" /etc/lightdm/lightdm.conf.d/20-autologin.conf
+firefly@firefly: sudo service lightdm restart
+```
 
 ##### Tips : Enable WiFi from CLI
 
-WiFi is disabled as default setting, so let's connect to your home WiFi(`SSID=XXXXXXXXXXXXXXX`).
+WiFi is disabled as default setting, so let's connect to your home WiFi.
     
-    ```
-    firefly@firefly: nmcli device status
-    DEVICE  TYPE      STATE         CONNECTION
-    eth0    ethernet  connected     Wired connection 1
-    wlan0   wifi      disconnected  --
-    lo      loopback  unmanaged     --
-    firefly@firefly: nmcli device wifi list
-    IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
+```
+firefly@firefly: nmcli device status
+DEVICE  TYPE      STATE         CONNECTION
+eth0    ethernet  connected     Wired connection 1
+wlan0   wifi      disconnected  --
+lo      loopback  unmanaged     --
+firefly@firefly: nmcli device wifi list
+IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
         XXXXXXXXXXXXXXX                 Infra  9     540 Mbit/s  55      ▂▄__  WPA2
         YYYYYYYYYYYYYYY                 Infra  9     65 Mbit/s   50      ▂▄__  WPA2
-    ```
+```    
 
-    To set WiFI password for SSID=XXXXX,
-    ```
-    firefly@firefly: SSID="<your WiFi SSID>"
-    firefly@firefly: WIFIPASS="<your WiFi SSID password>"
-    firefly@firefly: sudo nmcli device wifi connect ${SSID} password ${WIFIPASS} ifname wlan0
+To set WiFI password for SSID=XXXXX,
+```
+firefly@firefly: SSID="<your WiFi SSID>"
+firefly@firefly: WIFIPASS="<your WiFi SSID password>"
+firefly@firefly: sudo nmcli device wifi connect ${SSID} password ${WIFIPASS} ifname wlan0
     Device 'wlan0' successfully activated with 'zzz-zzzzzzz-zzz-zzzz'.
-    ```
+```
 
 You can confirm that wlan0 is in use.
 
-    ```
-    firefly@firefly:~$ nmcli device wifi list
-    IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
-    *       XXXXXXXXXXXXXXX                 Infra  9     540 Mbit/s  56      ▂▄▆_  WPA2
-        YYYYYYYYYYYYYYY                     Infra  9     65 Mbit/s   54      ▂▄__  WPA2
-    firefly@firefly:~$ nmcli device status
-    DEVICE  TYPE      STATE      CONNECTION
-    eth0    ethernet  connected  Wired connection 1
-    wlan0   wifi      connected  XXXXXXXXXXXXXXX
-    lo      loopback  unmanaged  --        
-    ```
+```
+firefly@firefly:~$ nmcli device wifi list
+IN-USE  SSID                            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
+    *   XXXXXXXXXXXXXXX                 Infra  9     540 Mbit/s  56      ▂▄▆_  WPA2
+        YYYYYYYYYYYYYYY                 Infra  9     65 Mbit/s   54      ▂▄__  WPA2
+firefly@firefly:~$ nmcli device status
+DEVICE  TYPE      STATE      CONNECTION
+eth0    ethernet  connected  Wired connection 1
+wlan0   wifi      connected  XXXXXXXXXXXXXXX
+lo      loopback  unmanaged  --        
+```
 
 ## 2. Build your own Linux image and flash to the board
 
