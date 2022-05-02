@@ -2,11 +2,15 @@
 # r3566pc_bionic_init.sh
 # SYNOPSIS:
 # R3566PC Ubuntu 18.04 LTS initialization script.
-# HOW TO RUN:
+# HOW TO USE:
 #  After booting R3566PC, you are login as firefly.
-#  RUn this script once.
-#
-sudo apt -y update && sudo apt -y upgrade
+#  Run this script once.
+# HOW TO ACCESS and RUN:
+# $> curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_bionic_init.sh > r3566pc_bionic_init.sh
+# $> chmod +x r3566pc_bionic_init.sh
+# $> ./r3566pc_bionic_init.sh
+# 
+sudo apt -y update && sudo apt -y install nano git
 sudo apt-get install -y avahi-daemon
 sudo systemctl restart avahi-daemon.service
 #
