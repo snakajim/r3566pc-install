@@ -6,7 +6,7 @@
 #  After booting R3566PC, you are login as firefly.
 #  Run this script once.
 # HOW TO ACCESS and RUN:
-# $> curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu1804/r3566pc_focal_init.sh > r3566pc_focal_init.sh
+# $> curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu2004/r3566pc_focal_init.sh > r3566pc_focal_init.sh
 # $> chmod +x r3566pc_focal_init.sh
 # $> ./r3566pc_focal_init.sh
 # 
