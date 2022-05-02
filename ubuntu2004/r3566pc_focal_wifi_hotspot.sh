@@ -30,7 +30,9 @@ echo "SSID=${HSSSID}"
 echo "Password=${HSPAWD}"
 sudo nmcli dev wifi show-password
 read -p "Please use this QR. Go to Next?[Enter]"
-
+# change Hotspot autoconnect=true for next login.
+# https://people.freedesktop.org/~lkundrak/nm-docs/nm-settings.html
+sudo sed -i -e "s/^autoconnect=false/autoconnect=true/" /etc/NetworkManager/system-connections/Hotspot.nmconnection
 #
 # check if nginx is active. It should be active.
 #
