@@ -1,7 +1,10 @@
 #!/bin/bash
 # r3566pc_focal_move_mmc.sh
 #
-
+# HOW TO RUN:
+# $> curl https://raw.githubusercontent.com/snakajim/r3566pc-install/main/ubuntu2004/r3566pc_focal_move_mmc.sh > r3566pc_focal_move_mmc.sh
+# $> chmod +x r3566pc_focal_move_mmc.sh
+# $> ./r3566pc_focal_move_mmc.sh
 WHOAMI=`whoami`
 
 if [ ! $WHOAMI == "root" ]; then
