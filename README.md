@@ -44,12 +44,12 @@ R3566PC software download site is [here](https://en.t-firefly.com/doc/download/9
 
 #### Download SD Writer
 
-Download FireFly SD writer from [here](pict\R3566-SDTool1.jpg) then install. After SD tool installation, set ```Selected=2``` at application config file to change language code in `SDDiskTool_v1.7/config.ini`.
+Download FireFly SD writer from [here](pict/R3566-SDTool1.jpg) then install. After SD tool installation, set ```Selected=2``` at application config file to change language code in `SDDiskTool_v1.7/config.ini`.
 
 #### Download OS image
 
- - Buildroot image is [here](pict\R3566-Buildroot.jpg).
- - Ubuntu image is [here](pict\R3566-UbuntuImage.jpg). Choose 18.04 for stable test, some issue in 20.04 image.
+ - Buildroot image is [here](pict/R3566-Buildroot.jpg).
+ - Ubuntu image is [here](pict/R3566-UbuntuImage.jpg). Choose 18.04 for stable test, some issue in 20.04 image.
 
 #### flash image to uSD
 
